@@ -27,7 +27,7 @@ const AppNavBar: FC<{ search?: boolean; profile?: boolean }> = (props) => {
 			p={2}
 			position="sticky"
 			top={0}
-			sx={{ backgroundColor: colors.primary[900] }}
+			sx={{ backgroundColor: colors.primary[400] }}
 			zIndex={11}
 			boxShadow={1}
 			alignItems={"center"}

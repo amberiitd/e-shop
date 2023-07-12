@@ -29,6 +29,8 @@ type TopPanelParam = {
 };
 
 const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
+  const theme: any = useTheme();
+	const colors = useMemo(() => tokens(theme.palette.mode), [theme]);
 	const [productGridPageNumber, setProductGridPageNumber] = useState(1);
 	const [topPanelParam, setTopPanelParam] = useState<TopPanelParam>({
 		view: "grid",
@@ -96,7 +98,7 @@ const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
 				</Grid>
 			)}
 			{topPanelParam.view === "list" && (
-				<TableContainer component={Paper} sx={{width: `calc(100% - 160px)`, margin: '0 80px 0 80px'}}>
+				<TableContainer component={Paper} sx={{width: `calc(100% - 160px)`, margin: '0 80px 0 80px', backgroundColor: colors.primary[400]}} >
 					<Table aria-label="simple table">
 						<TableHead>
 							<TableRow>
