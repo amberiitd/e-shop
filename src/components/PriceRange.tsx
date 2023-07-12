@@ -31,8 +31,8 @@ const PriceRange: FC<{min: number | undefined; max: number | undefined}> = ({min
 			<Box display={"flex"}>
 				<Typography>Range</Typography>
 				<Typography marginLeft={"auto"}>
-					{min}${" - "}
-					{max}$
+					{priceRange.min}${" - "}
+					{priceRange.max}$
 				</Typography>
 			</Box>
 		</Stack>
