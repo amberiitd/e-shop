@@ -18,10 +18,10 @@ const ProductCard: FC<{
   size?: number;
 }> = (props) => {
 	const navigate = useNavigate();
-  
-  const height = 30*(Math.min(props.size || 1, 1));
-  const width = 20*(Math.min(props.size || 1, 1));
-  const maxLabelChar = Math.ceil(40*(Math.min(props.size || 1, 1)));
+  const ratio = Math.min(props.size || 1, 1);
+  const height = 30*ratio;
+  const width = 20*ratio;
+  const maxLabelChar = Math.ceil(40*ratio);
 	return (
 		<Card
 			sx={{
@@ -34,7 +34,7 @@ const ProductCard: FC<{
 			<Box display={"flex"} justifyContent={"center"}>
 				<img src={props.image} style={{ height: `${Math.ceil(0.7*height)}rem`}} />
 			</Box>
-			<CardContent sx={{ paddingTop: "20px" }}>
+			<CardContent sx={{ paddingTop: `${20*ratio}px` }}>
 				<Typography textAlign={"center"}>
 					{startCase(props.category)}
 				</Typography>
@@ -42,7 +42,8 @@ const ProductCard: FC<{
 					gutterBottom
 					variant="h3"
 					textAlign={"center"}
-					fontWeight={200}
+					fontWeight={200*ratio}
+          fontSize={`${180*ratio}%`}
 				>
 					{props.label.length > maxLabelChar
 						? props.label.slice(0, maxLabelChar - 3) + "..."
