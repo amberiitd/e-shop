@@ -29,7 +29,7 @@ type TopPanelParam = {
 };
 
 const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
-  const theme: any = useTheme();
+	const theme: any = useTheme();
 	const colors = useMemo(() => tokens(theme.palette.mode), [theme]);
 	const [productGridPageNumber, setProductGridPageNumber] = useState(1);
 	const [topPanelParam, setTopPanelParam] = useState<TopPanelParam>({
@@ -66,7 +66,7 @@ const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
 				onChange={(param) => setTopPanelParam(param)}
 				pageSize={9}
 				offset={(productGridPageNumber - 1) * 9}
-        total={arrangedData.length}
+				total={arrangedData.length}
 			/>
 			{topPanelParam.view === "grid" && (
 				<Grid
@@ -90,15 +90,22 @@ const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
 									id={p.id}
 									label={p.title}
 									image={p.image}
-                  category={p.category}
-                  price={p.price}
+									category={p.category}
+									price={p.price}
 								/>
 							</Grid>
 						))}
 				</Grid>
 			)}
 			{topPanelParam.view === "list" && (
-				<TableContainer component={Paper} sx={{width: `calc(100% - 160px)`, margin: '0 80px 0 80px', backgroundColor: colors.primary[400]}} >
+				<TableContainer
+					component={Paper}
+					sx={{
+						width: `calc(100% - 160px)`,
+						margin: "0 80px 0 80px",
+						backgroundColor: colors.primary[400],
+					}}
+				>
 					<Table aria-label="simple table">
 						<TableHead>
 							<TableRow>
@@ -110,24 +117,30 @@ const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{arrangedData.map((row) => (
-								<TableRow
-									key={row.id}
-									sx={{
-										"&:last-child td, &:last-child th": {
-											border: 0,
-										},
-									}}
-								>
-									<TableCell component="th" scope="row">
-										{row.title}
-									</TableCell>
-									<TableCell>{row.description}</TableCell>
-									<TableCell align="right">
-										{row.price}
-									</TableCell>
-								</TableRow>
-							))}
+							{arrangedData
+								.slice(
+									(productGridPageNumber - 1) * 9,
+									productGridPageNumber * 9
+								)
+								.map((row) => (
+									<TableRow
+										key={row.id}
+										sx={{
+											"&:last-child td, &:last-child th":
+												{
+													border: 0,
+												},
+										}}
+									>
+										<TableCell component="th" scope="row">
+											{row.title}
+										</TableCell>
+										<TableCell>{row.description}</TableCell>
+										<TableCell align="right">
+											{row.price}
+										</TableCell>
+									</TableRow>
+								))}
 						</TableBody>
 					</Table>
 				</TableContainer>
@@ -165,7 +178,7 @@ const TopPanel: FC<{
 	defaultValue?: TopPanelParam;
 	pageSize?: number;
 	offset?: number;
-  total?: number;
+	total?: number;
 }> = ({ onChange, defaultValue, pageSize, offset, total }) => {
 	const theme: any = useTheme();
 	const colors = useMemo(() => tokens(theme.palette.mode), [theme]);
@@ -189,7 +202,8 @@ const TopPanel: FC<{
 			{pageSize && offset !== undefined && (
 				<Box display={"flex"} alignItems={"center"}>
 					<Typography variant="h6" fontWeight={600}>
-						Showing {offset + 1} - {offset + pageSize} of total {total} results
+						Showing {offset + 1} - {offset + pageSize} of total{" "}
+						{total} results
 					</Typography>
 				</Box>
 			)}
