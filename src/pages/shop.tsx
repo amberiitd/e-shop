@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
-import { FC, createContext, useEffect, useState } from "react";
+import { FC, createContext, useContext, useEffect, useMemo, useState } from "react";
 import AppNavBar from "../components/AppNavBar";
 import Banner from "../components/Banner";
-import { Card, Divider, Grid, Pagination, Stack, Typography } from "@mui/material";
+import { Card, Divider, Grid, IconButton, Modal, Pagination, Stack, Typography } from "@mui/material";
 import ProductCard from "../components/ProductCard";
 import ProductList from "../components/ProductList";
 import { max, min, noop, uniq } from "lodash";
@@ -10,20 +10,12 @@ import SearchBar from "../components/SearchBar";
 import PriceRange from "../components/PriceRange";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ProductCategories from "../components/ProductCategories";
+import { useTheme } from "@emotion/react";
+import { tokens } from "../contexts/theme";
+import ProductModal from "../components/ProductModal";
+import { AppContext } from "../contexts/app";
 
-export type BaseProduct = {
-	id: number;
-	title: string;
-	price: number;
-	description: string;
-	category: string;
-	image: string;
-	rating: {
-		rate: number;
-		count: number;
-	};
-};
-
+export type ProductModalProps = {show: boolean; selectedProduct?: number | string}
 export type PriceRange = { min: number; max: number };
 export const ShopPageContext = createContext<{
 	searchString: string;
@@ -32,6 +24,8 @@ export const ShopPageContext = createContext<{
 	setPriceRange: React.Dispatch<React.SetStateAction<PriceRange>>;
 	selectedCategories: string[];
 	setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  productModal: ProductModalProps;
+  setProductModal: React.Dispatch<React.SetStateAction<ProductModalProps>>
 }>({
 	searchString: "",
 	setSearchString: noop,
@@ -39,24 +33,25 @@ export const ShopPageContext = createContext<{
 	setPriceRange: noop,
 	selectedCategories: [],
 	setSelectedCategories: noop,
+  productModal: {show: false},
+  setProductModal: noop
 });
 const ShopPage: FC = () => {
-	const [productList, setProductList] = useState<BaseProduct[]>([]);
+  const theme: any = useTheme();
+	const colors = useMemo(() => tokens(theme.palette.mode), [theme]);
+  const {productList, setProductList} = useContext(AppContext);
 	const [searchString, setSearchString] = useState("");
 	const [priceRange, setPriceRange] = useState<PriceRange>({
 		min: 25,
 		max: 100,
 	});
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [productModal, setProductModal] = useState<ProductModalProps>({show: false})
 	useEffect(() => {
 		fetch("https://fakestoreapi.com/products?limit=100")
 			.then((res) => res.json())
 			.then((data) => setProductList(data));
 	}, []);
-
-	useEffect(() => {
-		console.log(uniq(productList.map((p) => p.category)));
-	}, [productList]);
 
 	return (
 		<ShopPageContext.Provider
@@ -67,6 +62,8 @@ const ShopPage: FC = () => {
 				setPriceRange,
 				selectedCategories,
 				setSelectedCategories,
+        productModal,
+        setProductModal
 			}}
 		>
 			<main>
@@ -130,6 +127,7 @@ const ShopPage: FC = () => {
 					</Grid>
 				</Box>
 			</main>
+      <ProductModal productList={productList}/>
 		</ShopPageContext.Provider>
 	);
 };

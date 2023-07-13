@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect, useMemo, useState } from "react";
-import { BaseProduct, ShopPageContext } from "../pages/shop";
+import { ShopPageContext } from "../pages/shop";
 import {
 	Grid,
 	Box,
@@ -22,6 +22,7 @@ import ProductCard from "./ProductCard";
 import { isEmpty, sortBy } from "lodash";
 import { useTheme } from "@emotion/react";
 import { tokens } from "../contexts/theme";
+import { BaseProduct } from "../contexts/app";
 
 type TopPanelParam = {
 	view: "grid" | "list";
