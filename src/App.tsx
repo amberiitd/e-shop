@@ -22,7 +22,7 @@ function App() {
 						</Routes>
 					</BrowserRouter>
 				</AppContextProvider>
-				<ToastContainer theme={theme.palette.mode} />
+				{/* <ToastContainer theme={theme.palette.mode} /> */}
 			</ThemeProvider>
 		</ColorModeContext.Provider>
 	);

@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useMemo, useState } from "react";
+import { FC, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ShopPageContext } from "../pages/shop";
 import {
 	Grid,
@@ -33,6 +33,7 @@ const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
 	const theme: any = useTheme();
 	const colors = useMemo(() => tokens(theme.palette.mode), [theme]);
 	const [productGridPageNumber, setProductGridPageNumber] = useState(1);
+  const panelRef = useRef<HTMLDivElement>();
 	const [topPanelParam, setTopPanelParam] = useState<TopPanelParam>({
 		view: "grid",
 		sortBy: "none",
@@ -62,7 +63,7 @@ const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
 		}
 	}, [arrangedData]);
 	return (
-		<>
+		<Box ref={panelRef}>
 			<TopPanel
 				onChange={(param) => setTopPanelParam(param)}
 				pageSize={9}
@@ -153,11 +154,11 @@ const ProductList: FC<{ data: BaseProduct[] }> = ({ data }) => {
 						count={Math.ceil(arrangedData.length / 9)}
 						variant="outlined"
 						shape="rounded"
-						onChange={(e, page) => setProductGridPageNumber(page)}
+						onChange={(e, page) => {setProductGridPageNumber(page); panelRef.current?.scrollIntoView({behavior: 'smooth'})}}
 					/>
 				</Box>
 			)}
-		</>
+		</Box>
 	);
 };
 
@@ -203,7 +204,7 @@ const TopPanel: FC<{
 			{pageSize && offset !== undefined && (
 				<Box display={"flex"} alignItems={"center"}>
 					<Typography variant="h6" fontWeight={600}>
-						Showing {offset + 1} - {offset + pageSize} of total{" "}
+						Showing {offset + 1} - {Math.min(offset + pageSize, total || (offset + pageSize))} of total{" "}
 						{total} results
 					</Typography>
 				</Box>
